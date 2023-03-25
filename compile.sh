@@ -1,4 +1,5 @@
 #!/bin/bash
+export LLVM_TOOLCHAIN=$(lli --print-toolchain-path)
 build_dir="./build"
 # Set the name of the OCaml source file
 ocaml_source_file="example.ml"
@@ -8,11 +9,10 @@ output_file="example"
 rm -rf $build_dir/*
 # Compile the OCaml source file to a native object file using the OCaml compiler
 ocamlc -output-complete-obj -cc $LLVM_TOOLCHAIN/clang -o "$build_dir/${output_file}.c" "${ocaml_source_file}"
-ocamlopt -output-complete-obj -cc $LLVM_TOOLCHAIN/clang -o "$build_dir/libmain.so" "${ocaml_source_file}"
-
-
+# ocamlopt -output-complete-obj -cc $LLVM_TOOLCHAIN/clang -o "$build_dir/libmain.so" "${ocaml_source_file}"
 echo Compiling $build_dir/$output_file.c
-$LLVM_TOOLCHAIN/clang $build_dir/$output_file.c -L$(ocamlc -where) -I$(ocamlc -where) -L$build_dir -lcamlrun -lmain -o $build_dir/$output_file
+
+$LLVM_TOOLCHAIN/clang -L$(opam var lib)/ocaml -L$(ocamlc -where) -I$(ocamlc -where) -lasmrun $build_dir/$output_file.c  -o $build_dir/$output_file
 # Compile the C file to LLVM bitcode using the LLVM compiler
 # $LLVM_TOOLCHAIN/clang -c -emit-llvm "$build_dir${output_file}.o" -o "${output_file}.bc"
 
