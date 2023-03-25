@@ -12,7 +12,7 @@ ocamlopt -output-complete-obj -cc $LLVM_TOOLCHAIN/clang -o "$build_dir/libmain.s
 
 
 echo Compiling $build_dir/$output_file.c
-$LLVM_TOOLCHAIN/clang $build_dir/$output_file.c -L$(ocamlc -where) -L$build_dir -lcamlrun -lmain -o $build_dir/$output_file
+$LLVM_TOOLCHAIN/clang $build_dir/$output_file.c -L$(ocamlc -where) -I$(ocamlc -where) -L$build_dir -lcamlrun -lmain -o $build_dir/$output_file
 # Compile the C file to LLVM bitcode using the LLVM compiler
 # $LLVM_TOOLCHAIN/clang -c -emit-llvm "$build_dir${output_file}.o" -o "${output_file}.bc"
 
