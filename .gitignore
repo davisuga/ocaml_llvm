@@ -2,4 +2,5 @@
 *.cmx
 *.so
 *.o
+*.cmo
 build/*
